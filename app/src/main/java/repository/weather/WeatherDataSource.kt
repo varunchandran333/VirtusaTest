@@ -13,4 +13,9 @@ class WeatherDataSource(
             Flow<NetworkResult<WeatherApiResponse>> = handleApi {
         apiService.getWeather(city = city)
     }
+
+    fun getWeatherLatAndLong(lat: Double, log: Double):
+            Flow<NetworkResult<WeatherApiResponse>> = handleApi {
+        apiService.getWeatherLatAndLog(lat, log)
+    }
 }

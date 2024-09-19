@@ -25,6 +25,15 @@ class WeatherViewModel(private val repositoryInterface: WeatherRepositoryInterfa
         }
     }
 
+    fun getWeatherUsingLatAndLong(lat: Double, long: Double) {
+        viewModelScope.launch(Dispatchers.IO) {
+            repositoryInterface.getWeather(lat, long).distinctUntilChanged()
+                .collect { response ->
+                    weatherData.value = response
+                }
+        }
+    }
+
     fun updateCity(data: String) {
         city.value = data
         getWeatherData()

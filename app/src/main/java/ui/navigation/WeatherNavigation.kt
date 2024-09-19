@@ -8,6 +8,7 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
 import com.training.programmingtest.ui.screens.DashBoardScreen
+import com.training.programmingtest.ui.screens.LocationScreen
 import com.training.programmingtest.ui.screens.SearchScreen
 import com.training.programmingtest.ui.screens.SplashScreen
 import com.training.programmingtest.viewmodel.weather.WeatherViewModel
@@ -21,20 +22,34 @@ fun WeatherNavigation() {
         composable(WeatherScreens.SplashScreen.name) {
             SplashScreen(navController)
         }
+        composable(WeatherScreens.LocationScreen.name) {
+            LocationScreen(navController)
+        }
         val route = WeatherScreens.DashBoardScreen.name
         composable(
-            "$route/{city}",
+            "$route/{city}/{lat}/{lon}",
             arguments = listOf(
                 navArgument(name = "city") {
                     type = NavType.StringType
-                })
+                },
+                navArgument(name = "lat") {
+                    defaultValue = 0.0
+                    type = NavType.FloatType
+                },
+                navArgument(name = "lon") {
+                    defaultValue = 0.0
+                    type = NavType.FloatType
+                }
+            )
         ) { navBack ->
-            navBack.arguments?.getString("city").let { city ->
-
-                val viewModel = koinViewModel<WeatherViewModel>()
+            val city = navBack.arguments?.getString("city")
+            val lat = navBack.arguments?.getFloat("lat")
+            val lon = navBack.arguments?.getFloat("lon")
+            val viewModel = koinViewModel<WeatherViewModel>()
+            if (lat != null && lon != null) {
                 DashBoardScreen(
                     navController = navController, viewModel,
-                    city = city!!
+                    city = city!!, lat.toDouble(), lon.toDouble()
                 )
             }
 

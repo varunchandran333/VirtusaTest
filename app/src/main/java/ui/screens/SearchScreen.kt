@@ -67,7 +67,7 @@ fun SearchScreen(navController: NavController) {
                         .align(Alignment.CenterHorizontally)
                 ) { mCity ->
                     preferenceManager.saveData("city", mCity)
-                    navController.navigate(WeatherScreens.DashBoardScreen.name + "/$mCity")
+                    navController.navigate(WeatherScreens.DashBoardScreen.name + "/$mCity/${0f}/${0f}")
 
                 }
 

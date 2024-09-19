@@ -66,6 +66,7 @@ dependencies {
     implementation(libs.androidx.lifecycle.common.java8)
     implementation(libs.koin.android)
     implementation(libs.androidx.navigation.compose)
+    implementation(libs.play.services.location)
     testImplementation(libs.koin.test.junit4)
     implementation(libs.okhttp)
     testImplementation(libs.mockwebserver)

@@ -14,4 +14,12 @@ interface WeatherApi {
         @Query("appid") appid: String = APP_ID,
         @Query("units") units: String = "imperial"
     ): Response<WeatherApiResponse>
+
+    @GET(value = "data/2.5/weather")
+    suspend fun getWeatherLatAndLog(
+        @Query("lat") lat: Double,
+        @Query("lon") lon: Double,
+        @Query("appid") appid: String = APP_ID,
+        @Query("units") units: String = "imperial"
+    ): Response<WeatherApiResponse>
 }

@@ -7,4 +7,7 @@ import kotlinx.coroutines.flow.Flow
 interface WeatherRepositoryInterface {
     fun getWeather(city: String):
             Flow<NetworkResult<WeatherApiResponse>>
+
+    fun getWeather(lat: Double, log: Double):
+            Flow<NetworkResult<WeatherApiResponse>>
 }

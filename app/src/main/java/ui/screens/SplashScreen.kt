@@ -5,6 +5,7 @@ import androidx.compose.animation.core.Animatable
 import androidx.compose.animation.core.tween
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.foundation.BorderStroke
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.padding
@@ -18,17 +19,18 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.scale
+import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
-import androidx.navigation.navOptions
+import com.training.programmingtest.R
 import com.training.programmingtest.ui.navigation.WeatherScreens
 import kotlinx.coroutines.delay
 
 @Composable
 fun SplashScreen(navController: NavController) {
-    val defaultCity = "San Diego"
     val scale = remember {
         Animatable(0f)
     }
@@ -43,7 +45,7 @@ fun SplashScreen(navController: NavController) {
         )
         delay(2000L)
 
-        navController.navigate(WeatherScreens.DashBoardScreen.name + "/$defaultCity")
+        navController.navigate(WeatherScreens.LocationScreen.name)
     })
     Surface(
         modifier = Modifier
@@ -61,12 +63,12 @@ fun SplashScreen(navController: NavController) {
             verticalArrangement = Arrangement.Center,
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
-//            Image(
-//                modifier = Modifier.size(95.dp),
-//                painter = painterResource(id = R.drawable.weather),
-//                contentDescription = "Weather Icon",
-//                contentScale = ContentScale.Fit
-//            )
+            Image(
+                modifier = Modifier.size(95.dp),
+                painter = painterResource(id = R.drawable.weather),
+                contentDescription = "Weather Icon",
+                contentScale = ContentScale.Fit
+            )
             Text(
                 text = "Weather Today",
                 fontStyle = FontStyle.Italic,

@@ -16,7 +16,6 @@ import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
@@ -46,16 +45,20 @@ import utils.PreferencesManager
 fun DashBoardScreen(
     navController: NavController,
     weatherViewModel: WeatherViewModel = koinViewModel<WeatherViewModel>(),
-    city: String
+    city: String,
+    lat: Double,
+    long: Double
 ) {
-    ShowData(weatherViewModel, navController, city)
+    ShowData(weatherViewModel, navController, city, lat, long)
 }
 
 @Composable
 fun ShowData(
     weatherViewModel: WeatherViewModel,
     navController: NavController,
-    city: String
+    city: String,
+    lat: Double,
+    long: Double
 ) {
     val context = LocalContext.current
 
@@ -66,11 +69,16 @@ fun ShowData(
         mutableStateOf(preferenceManager.getData("city", ""))
     }
     LaunchedEffect(Unit) {
-        if (savedCity.value.isNotEmpty()) {
-            weatherViewModel.updateCity(savedCity.value)
+        if (lat != 0.0 && long != 0.0) {
+            weatherViewModel.getWeatherUsingLatAndLong(lat, long)
         } else {
-            weatherViewModel.updateCity(city)
+            if (savedCity.value.isNotEmpty()) {
+                weatherViewModel.updateCity(savedCity.value)
+            } else {
+                weatherViewModel.updateCity(city)
+            }
         }
+
     }
     val weatherData = weatherViewModel.weatherData.collectAsStateWithLifecycle().value
     Render(uiState = weatherData, navController = navController)

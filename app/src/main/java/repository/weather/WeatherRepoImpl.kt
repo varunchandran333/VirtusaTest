@@ -7,4 +7,8 @@ import kotlinx.coroutines.flow.Flow
 class WeatherRepoImpl(private val dataSource: WeatherDataSource) : WeatherRepositoryInterface {
     override fun getWeather(city: String): Flow<NetworkResult<WeatherApiResponse>> =
         dataSource.getWeather(city)
+
+    override fun getWeather(lat: Double, log: Double): Flow<NetworkResult<WeatherApiResponse>> =
+        dataSource.getWeatherLatAndLong(lat, log)
+
 }
