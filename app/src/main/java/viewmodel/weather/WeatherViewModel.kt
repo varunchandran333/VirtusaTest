@@ -5,33 +5,34 @@ import androidx.lifecycle.viewModelScope
 import com.training.programmingtest.data.wrapper.NetworkResult
 import com.training.programmingtest.repository.weather.WeatherRepositoryInterface
 import data.model.WeatherApiResponse
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.distinctUntilChanged
-import kotlinx.coroutines.launch
+import kotlinx.coroutines.flow.SharingStarted
+import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.stateIn
 
 class WeatherViewModel(private val repositoryInterface: WeatherRepositoryInterface) : ViewModel() {
-    var weatherData: MutableStateFlow<NetworkResult<WeatherApiResponse>> =
+    var weatherData: StateFlow<NetworkResult<WeatherApiResponse>> =
         MutableStateFlow(NetworkResult.Loading)
     private var city: MutableStateFlow<String> = MutableStateFlow("")
+
     private fun getWeatherData() {
-        viewModelScope.launch(Dispatchers.IO) {
-            if (city.value.isNotEmpty()) {
-                repositoryInterface.getWeather(city.value).distinctUntilChanged()
-                    .collect { response ->
-                        weatherData.value = response
-                    }
-            }
-        }
+        weatherData =
+            repositoryInterface.getWeather(city.value)
+                .stateIn(
+                    scope = viewModelScope,
+                    initialValue = NetworkResult.Loading,
+                    started = SharingStarted.WhileSubscribed(5000L)
+                )
     }
 
     fun getWeatherUsingLatAndLong(lat: Double, long: Double) {
-        viewModelScope.launch(Dispatchers.IO) {
-            repositoryInterface.getWeather(lat, long).distinctUntilChanged()
-                .collect { response ->
-                    weatherData.value = response
-                }
-        }
+        weatherData =
+            repositoryInterface.getWeather(lat, long)
+                .stateIn(
+                    scope = viewModelScope,
+                    initialValue = NetworkResult.Loading,
+                    started = SharingStarted.WhileSubscribed(5000L)
+                )
     }
 
     fun updateCity(data: String) {
