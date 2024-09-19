@@ -1,5 +1,8 @@
 package com.training.programmingtest.utils
 
+import android.content.Context
+import android.content.ContextWrapper
+import androidx.activity.ComponentActivity
 import java.text.SimpleDateFormat
 
 fun formatDate(timestamp: Int): String {
@@ -18,4 +21,10 @@ fun formatDateTime(timestamp: Int): String {
 
 fun formatDecimals(item: Double): String {
     return " %.0f".format(item)
+}
+
+fun Context.findActivity(): ComponentActivity? = when (this) {
+    is ComponentActivity -> this
+    is ContextWrapper -> baseContext.findActivity()
+    else -> null
 }

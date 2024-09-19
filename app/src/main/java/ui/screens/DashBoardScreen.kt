@@ -1,6 +1,7 @@
 package com.training.programmingtest.ui.screens
 
 import android.util.Log
+import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
@@ -33,6 +34,7 @@ import com.training.programmingtest.ui.widgets.HumidityWindPressureRow
 import com.training.programmingtest.ui.widgets.SunsetSunRiseRow
 import com.training.programmingtest.ui.widgets.WeatherAppBar
 import com.training.programmingtest.ui.widgets.WeatherStateImage
+import com.training.programmingtest.utils.findActivity
 import com.training.programmingtest.utils.formatDate
 import com.training.programmingtest.utils.formatDecimals
 import com.training.programmingtest.viewmodel.weather.WeatherViewModel
@@ -49,6 +51,10 @@ fun DashBoardScreen(
     lat: Double,
     long: Double
 ) {
+    val context = LocalContext.current
+    BackHandler {
+        context.findActivity()?.finish()
+    }
     ShowData(weatherViewModel, navController, city, lat, long)
 }
 
