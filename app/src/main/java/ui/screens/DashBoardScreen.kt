@@ -15,15 +15,18 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
-import androidx.compose.runtime.produceState
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
-import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavController
 import com.training.programmingtest.data.wrapper.NetworkResult
 import com.training.programmingtest.ui.navigation.WeatherScreens
@@ -37,6 +40,7 @@ import com.training.programmingtest.viewmodel.weather.WeatherViewModel
 import data.model.WeatherApiResponse
 import org.koin.androidx.compose.koinViewModel
 import org.koin.core.logger.KOIN_TAG
+import utils.PreferencesManager
 
 @Composable
 fun DashBoardScreen(
@@ -53,8 +57,22 @@ fun ShowData(
     navController: NavController,
     city: String
 ) {
-    weatherViewModel.updateCity(city)
-    val weatherData = weatherViewModel.weatherData.collectAsState().value
+    val context = LocalContext.current
+
+    val preferenceManager = remember {
+        PreferencesManager(context)
+    }
+    val savedCity = remember {
+        mutableStateOf(preferenceManager.getData("city", ""))
+    }
+    LaunchedEffect(Unit) {
+        if (savedCity.value.isNotEmpty()) {
+            weatherViewModel.updateCity(savedCity.value)
+        } else {
+            weatherViewModel.updateCity(city)
+        }
+    }
+    val weatherData = weatherViewModel.weatherData.collectAsStateWithLifecycle().value
     Render(uiState = weatherData, navController = navController)
 }
 
@@ -102,8 +120,6 @@ fun MainScaffold(
             navController = navController,
             onAddButtonClicked = {
                 navController.navigate(WeatherScreens.SearchScreen.name)
-
-
             },
             elevation = 5.dp
         ) {
@@ -160,7 +176,7 @@ fun MainContent(modifier: Modifier = Modifier, data: WeatherApiResponse) {
         }
         HumidityWindPressureRow(weather = data)
         HorizontalDivider()
-        SunsetSunRiseRow(weather = data)
+        SunsetSunRiseRow(data)
 
     }
 

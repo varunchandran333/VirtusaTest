@@ -7,12 +7,8 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
-import com.training.programmingtest.ui.navigation.WeatherScreens
-import com.training.programmingtest.ui.screens.AboutScreen
 import com.training.programmingtest.ui.screens.DashBoardScreen
-import com.training.programmingtest.ui.screens.FavouritesScreen
 import com.training.programmingtest.ui.screens.SearchScreen
-import com.training.programmingtest.ui.screens.SettingsScreen
 import com.training.programmingtest.ui.screens.SplashScreen
 import com.training.programmingtest.viewmodel.weather.WeatherViewModel
 import org.koin.androidx.compose.koinViewModel
@@ -26,28 +22,23 @@ fun WeatherNavigation() {
             SplashScreen(navController)
         }
         val route = WeatherScreens.DashBoardScreen.name
-        composable("$route/{city}",
+        composable(
+            "$route/{city}",
             arguments = listOf(
-                navArgument(name = "city"){
+                navArgument(name = "city") {
                     type = NavType.StringType
-                })){ navBack ->
+                })
+        ) { navBack ->
             navBack.arguments?.getString("city").let { city ->
 
                 val viewModel = koinViewModel<WeatherViewModel>()
-                DashBoardScreen(navController = navController, viewModel,
-                    city = city!!)
+                DashBoardScreen(
+                    navController = navController, viewModel,
+                    city = city!!
+                )
             }
 
 
-        }
-        composable(WeatherScreens.AboutScreen.name) {
-            AboutScreen(navController)
-        }
-        composable(WeatherScreens.FavouritesScreen.name) {
-            FavouritesScreen(navController)
-        }
-        composable(WeatherScreens.SettingsScreen.name) {
-            SettingsScreen(navController)
         }
         composable(WeatherScreens.SearchScreen.name) {
             SearchScreen(navController)

@@ -1,4 +1,4 @@
-package com.training.testapp.repository.weather
+package com.training.programmingtest.repository.weather
 
 import com.training.programmingtest.data.wrapper.NetworkResult
 import data.model.WeatherApiResponse

@@ -1,17 +1,13 @@
 package com.training.programmingtest.viewmodel.weather
 
-import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.training.programmingtest.data.wrapper.NetworkResult
-import com.training.testapp.repository.weather.WeatherRepositoryInterface
+import com.training.programmingtest.repository.weather.WeatherRepositoryInterface
 import data.model.WeatherApiResponse
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.SharingStarted
-import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.distinctUntilChanged
-import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
 
 class WeatherViewModel(private val repositoryInterface: WeatherRepositoryInterface) : ViewModel() {
@@ -26,7 +22,6 @@ class WeatherViewModel(private val repositoryInterface: WeatherRepositoryInterfa
                         weatherData.value = response
                     }
             }
-
         }
     }
 

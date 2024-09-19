@@ -43,10 +43,7 @@ fun SplashScreen(navController: NavController) {
         )
         delay(2000L)
 
-        navController.navigate(WeatherScreens.DashBoardScreen.name + "/$defaultCity",
-            navOptions = navOptions {
-                launchSingleTop = true
-            })
+        navController.navigate(WeatherScreens.DashBoardScreen.name + "/$defaultCity")
     })
     Surface(
         modifier = Modifier
